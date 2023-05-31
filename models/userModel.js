@@ -19,6 +19,14 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    isAvatarSet:{
+      type: Boolean,
+      default: false
+    },
+    avatar:{
+      type: String,
+      default: ""
+    }
   },
   { timestamps: true }
 );

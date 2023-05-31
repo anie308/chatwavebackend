@@ -14,7 +14,6 @@ const createUser = async (req, res) => {
         status: "error",
         message: "Username already exists pick another one",
       });
-
     else if (isAlreadyExists)
       return res.status(400).json({
         status: "error",
@@ -28,6 +27,7 @@ const createUser = async (req, res) => {
       });
 
       newUser.save();
+
       res.status(200).json({
         status: "success",
         message: "Registration Successful Login to continue",
@@ -36,14 +36,13 @@ const createUser = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
- 
 };
 
 const loginUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  const isExistingUser = await User.findOne({ username });
-  !isExistingUser && res.status(401).json("Wrong Credentials !");
+  const isExistingUser = await User.findOne({ email });
+  !isExistingUser && res.status(401).json("Wrong Credentials!");
   const hashedGuy = cryptoJs.AES.decrypt(
     isExistingUser.password,
     process.env.PASS_SEC
@@ -51,7 +50,10 @@ const loginUser = async (req, res) => {
   const decryptedPassword = hashedGuy.toString(cryptoJs.enc.Utf8);
 
   if (decryptedPassword !== password) {
-    res.status(401).json("Wrong Credentials!");
+    res.status(401).json({
+      status: "error",
+      message: "Wrong Credentials !",
+    });
   } else {
     const accessToken = jwt.sign(
       {
@@ -63,14 +65,26 @@ const loginUser = async (req, res) => {
 
     const { password, ...others } = isExistingUser._doc;
 
-    res.status(200).json({
-      status: "success",
-      message: "Logged in successfully !",
-      data: { ...others, accessToken },
-    });
+    res.status(200).json({ ...others, accessToken });
   }
+};
+
+const getAllUsers = async (req, res) => {
+  const { id } = req.params;
+  const users = await User.find({ _id: { $ne: id } }).select([
+    "email",
+    "username",
+    "avatar",
+    "id",
+  ]);
+  res.status.json({
+    status: "success",
+    message: "All users",
+    data: users,
+  });
 };
 module.exports = {
   createUser,
   loginUser,
+  getAllUsers,
 };
