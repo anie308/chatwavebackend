@@ -23,10 +23,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    avatar:{
-      type: String,
-      default: ""
-    }
+    avatar: {
+      type: Object,
+      url: {
+        type: URL,
+      },
+      public_id: {
+        type: String,
+      },
+    },
   },
   { timestamps: true }
 );
