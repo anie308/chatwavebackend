@@ -7,6 +7,7 @@ const addMessage = async (req, res) => {
       message: { text: message },
       users: [from, to],
       sender: from,
+      createdAt: createdAt,
     });
 
     if (data) {
@@ -37,6 +38,7 @@ const getAllMessages = async(req, res) => {
             return {
                 fromSelf: msg.sender.toString() === from,
                 message: msg.message.text,
+                createdAt: msg.createdAt
             };
         })
 
