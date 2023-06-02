@@ -22,12 +22,12 @@ app.use(`${apiSeedUrl}/user`, userRoutes);
 app.use(`${apiSeedUrl}/message`, messageRoutes);
 
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
   });   
 
 
-  const io = socket(app, {
+  const io = socket(server, {
     cors: {
       origin: "*",
       credentials: true,
