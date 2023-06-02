@@ -26,9 +26,8 @@ app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
   });   
 
-  const server = require('http').createServer(app);
 
-  const io = socket(server, {
+  const io = socket(app, {
     cors: {
       origin: "*",
       credentials: true,
