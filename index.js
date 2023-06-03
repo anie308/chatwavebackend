@@ -6,7 +6,6 @@ const port = process.env.PORT || 3300;
 const userRoutes = require("./routes/userRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const cors = require("cors");
-
 const app = express();
 const socket = require("socket.io");
 app.use(cors());
@@ -54,9 +53,11 @@ io.on("connection", (socket) => {
   global.chatSocket = socket;
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
+    console.log("Hello")
   });
 
   socket.on("send-msg", (data) => {
+    console.log("Hello There")
     const sendUserSocket = onlineUsers.get(data.to);
     if (sendUserSocket) {
       socket.to(sendUserSocket).emit("msg-recieve", data.msg);
