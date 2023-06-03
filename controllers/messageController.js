@@ -25,26 +25,27 @@ const addMessage = async (req, res) => {
     console.log(err);
   }
 };
-const getAllMessages = async(req, res) => {
-    try{
-        const { from, to } = req.body;
-        const messages = await Messages.find({
-            users: {
-                $all: [from, to]
-            }
-        }).sort({updatedAt: 1});
-        const projectedMessages = messages.map((msg) => {
-            return {
-                fromSelf: msg.sender.toString() === from,
-                message: msg.message.text,
-                createdAt: msg.createdAt,
-            };
-        })
+const getAllMessages = async (req, res) => {
+  try {
+    const { from, to } = req.body;
+    const messages = await Messages.find({
+      users: {
+        $all: [from, to],
+      },
+    }).sort({ updatedAt: 1 });
+    const projectedMessages = messages.map((msg) => {
+      return {
+        id: msg._id,
+        fromSelf: msg.sender.toString() === from,
+        message: msg.message.text,
+        createdAt: msg.createdAt,
+      };
+    });
 
-        res.status(200).json(projectedMessages)
-    }catch(err){
-        console.log(err)
-    }
+    res.status(200).json(projectedMessages);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports = {
