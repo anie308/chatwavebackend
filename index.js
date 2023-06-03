@@ -8,7 +8,8 @@ const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const {Server} = require("socket.io");
 const cors = require("cors");
-const httpServer = require('http').createServer(app);
+const http = require("http");
+
 const app = express();
 app.use(cors());
 const apiSeedUrl = '/api/v1';
@@ -25,7 +26,7 @@ app.use(`${apiSeedUrl}/message`, messageRoutes);
   console.log(`Server listening on port ${port}`);
 });   
 
-const io = (httpServer, {
+const io = new Server(server, {
   cors: {
     origin: "*",
     credentials: true,
