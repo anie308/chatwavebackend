@@ -20,7 +20,7 @@ const createUser = async (req, res) => {
         message: "User already Exists, please login to continue",
       });
     else {
-      const newUser = new User({
+      const newUser = new Users({
         username,
         email,
         password: cryptoJs.AES.encrypt(password, process.env.PASS_SEC),
