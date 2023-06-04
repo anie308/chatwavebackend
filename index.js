@@ -100,13 +100,13 @@ io.on("connection", (socket) => {
   console.log("Socket connected: ", socket.id);
 
   socket.on("add-user", (userId) => {
-    global.onlineUsers.set(userId, socket.id);
+    onlineUsers.set(userId, socket.id);
     console.log("User added: ", userId);
   });
 
   socket.on("send-msg", (data) => {
     console.log("Message sent:", data);
-    const sendUserSocket = global.onlineUsers.get(data.to);
+    const sendUserSocket = onlineUsers.get(data.to);
     console.log("sendUserSocket", sendUserSocket);
     if (sendUserSocket) {
       io.to(sendUserSocket).emit("msg-recieve", data.message);
