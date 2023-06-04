@@ -57,11 +57,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send-msg", (data) => {
-    console.log(data)
+    console.log("sent",data)
     const sendUserSocket = onlineUsers.get(data.to);
     if (sendUserSocket) {
       socket.to(sendUserSocket).emit("msg-recieve", data.msg);
-      console.log(data.msg)
+      console.log("recieve", data.msg)
     }
   });
 });
