@@ -49,20 +49,34 @@ const io = socket(server, {
 // });
 
 global.onlineUsers = new Map();
+// io.on("connection", (socket) => {
+//   global.chatSocket = socket;
+//   socket.on("add-user", (userId) => {
+//     onlineUsers.set(userId, socket.id);
+//     console.log("Hello")
+//   });
+
+//   socket.on("send-msg", (data) => {
+//     console.log("sent",data)
+//     const sendUserSocket = onlineUsers.get(data.to);
+//     console.log("sendUserSocket",sendUserSocket)
+//     if (sendUserSocket) {
+//       socket.to(sendUserSocket).emit("msg-recieve", data.message);
+//       console.log("recieve", data.message)
+//     }
+//   });
+// });
+
 io.on("connection", (socket) => {
   global.chatSocket = socket;
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
-    console.log("Hello")
   });
 
   socket.on("send-msg", (data) => {
-    console.log("sent",data)
     const sendUserSocket = onlineUsers.get(data.to);
-    console.log("sendUserSocket",sendUserSocket)
     if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recieve", data.message);
-      console.log("recieve", data.message)
+      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
     }
   });
 });
