@@ -18,6 +18,9 @@
     "socket.io": "^4.6.2",
     "tslog": "^4.8.2"
   },
+  "engines":{
+    "node": ">=16"
+  }
   "devDependencies": {
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22"
