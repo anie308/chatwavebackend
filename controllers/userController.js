@@ -2,7 +2,8 @@ const cryptoJs = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/userModel");
 const { isValidObjectId } = require("mongoose");
-const  axios =  require("axios");
+const cloudinary = require("../cloud");
+
 
 const createUser = async (req, res) => {
   try {
@@ -27,31 +28,52 @@ const createUser = async (req, res) => {
         password: cryptoJs.AES.encrypt(password, process.env.PASS_SEC),
       });
 
-    //  const response =  await axios.put(
-    //     "https://api.chatengine.io/users/",
-    //     {
-    //       username: username,
-    //       secret: password,
-    //       first_name: username,
-    //     },
-    //     {
-    //       headers: {
-    //         "private-key": process.env.CHAT_ENGINE_KEY,
-    //       },
-    //     }
-    //   );
-    //   console.log(response)
       newUser.save();
 
       res.status(200).json({
         status: "success",
         message: "Registration Successful Login to continue",
+        data: newUser
       });
     }
   } catch (err) {
     console.log(err);
   }
 };
+
+const updateUser = async(req, res)=> {
+  try{
+    const {userId} = req.params
+    const { description} = req.body
+    const { file } = req;
+    let profilePicture;
+
+    if (file) {
+      const { secure_url: url, public_id } = await cloudinary.uploader.upload(
+        file.path
+      );
+      profilePicture = { url, public_id };
+
+          // newLesson.lessons.lesson_video = { url, public_id };
+    }
+    console.log(profilePicture)
+
+    const updatedUser = await Users.findByIdAndUpdate(userId, {
+      description,
+      profilePicture
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+
+    
+  }catch(err){
+
+  }
+}
 
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
@@ -129,4 +151,5 @@ module.exports = {
   loginUser,
   getAllUsers,
   getSingleUser,
+  updateUser
 };

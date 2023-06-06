@@ -14,10 +14,24 @@ const userSchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
+    description:{
+      type: String,
+      trim: true,
+      unique: true,
+    },
     password: {
       type: String,
       required: true,
       unique: true,
+    },
+    profilePicture: {
+      type: Object,
+      url: {
+        type: URL,
+      },
+      public_id: {
+        type: String,
+      },
     },
     isAvatarSet:{
       type: Boolean,
